@@ -11,23 +11,6 @@
         {{ item.label }}
       </li>
     </ul>
-
-    <!-- Tree (optional) -->
-    <div v-if="treeData && treeData.length" class="tree-container">
-      <TreeViewComponent
-        :treeData="treeData"
-        :textColor="textColor"
-        :hoverColor="hoverColor"
-        :expandedColor="expandedColor"
-        :fontSize="fontSize"
-        :iconSize="iconSize"
-        containerBg="transparent"
-        containerPadding="5px"
-        borderRadius="0"
-        @nodeClick="$emit('nodeClick', $event)"
-      />
-    </div>
-
     <!-- Bottom Items -->
     <ul class="navbar-items bottom-items">
       <li

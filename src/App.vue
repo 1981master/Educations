@@ -3,12 +3,13 @@
     <header>{{ user }} Grade {{ grade }} Dashboard</header>
 
     <main>
-      <!-- Navbar with top/bottom items -->
       <NavbarComponent
         :itemsData="[
-          { label: 'Dashboard', position: 'top' },
-          { label: 'Profile', position: 'top' },
-          { label: 'Settings', position: 'bottom' },
+          { label: 'Dashboard', position: 'top', route: '/' },
+          { label: 'Kinder Garden', position: 'top', route: '/kindergarten' },
+          { label: 'Profile', position: 'top', route: '/profile' },
+          { label: 'First Grade', position: 'top', route: '/first-grade' },
+          { label: 'Settings', position: 'bottom', route: '/settings' },
           { label: 'Logout', position: 'bottom' },
         ]"
         backgroundColor="#6fd2be"
@@ -20,10 +21,9 @@
         @itemClick="handleItemClick"
       />
 
-      <!-- Main content -->
+      <!-- Main content rendered via routing -->
       <div class="content-area">
-        <h2>Welcome, {{ user }}!</h2>
-        <p>Select an item from the sidebar to continue.</p>
+        <router-view />
       </div>
     </main>
 
@@ -32,12 +32,14 @@
 </template>
 
 <script>
+  import EmojiGame from './components/FirstGradeComponents/EmojiGame.vue'
   import NavbarComponent from './components/NavbarComponent.vue'
 
   export default {
     name: 'App',
     components: {
       NavbarComponent,
+      EmojiGame,
     },
     data() {
       return {
@@ -47,7 +49,11 @@
     },
     methods: {
       handleItemClick(item) {
-        alert(`You clicked on ${item.label}`)
+        if (item.route) {
+          this.$router.push(item.route)
+        } else {
+          alert(`You clicked on ${item.label}`)
+        }
       },
     },
   }
