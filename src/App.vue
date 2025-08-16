@@ -9,6 +9,27 @@
           { label: 'Kinder Garden', position: 'top', route: '/kindergarten' },
           { label: 'Profile', position: 'top', route: '/profile' },
           { label: 'First Grade', position: 'top', route: '/first-grade' },
+          {
+            label: 'Fifth Grade',
+            position: 'top',
+            children: [
+              { label: 'Game 1: Prime Numbers', route: '/fifth-grade/game1' },
+              {
+                label: 'Game 2: Fractions Puzzle',
+                route: '/fifth-grade/game2',
+              },
+              {
+                label: 'Game 3: Geometry Explorer',
+                route: '/fifth-grade/game3',
+              },
+              { label: 'Game 4: Math Riddles', route: '/fifth-grade/game4' },
+              { label: 'Game 5: Logic Maze', route: '/fifth-grade/game5' },
+              {
+                label: 'Game 6: Equation Balance',
+                route: '/fifth-grade/game6',
+              },
+            ],
+          },
           { label: 'Settings', position: 'bottom', route: '/settings' },
           { label: 'Logout', position: 'bottom' },
         ]"
@@ -52,7 +73,6 @@
         if (item.route) {
           this.$router.push(item.route)
         } else {
-          alert(`You clicked on ${item.label}`)
         }
       },
     },
