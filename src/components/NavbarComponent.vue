@@ -114,6 +114,17 @@
 <style scoped>
   .navbar {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: width 0.3s ease;
+    overflow-y: auto;
+    background-color: #6fd2be;
+    color: #fff;
+    position: relative;
+    padding: 10px;
+    box-sizing: border-box;
   }
 
   /* Top and bottom items container */
@@ -134,7 +145,9 @@
     align-items: center;
     cursor: pointer;
     padding: 8px;
-    transition: background 0.2s;
+    transition:
+      background 0.2s,
+      color 0.2s;
   }
 
   .item-label:hover {
@@ -142,10 +155,15 @@
     color: white;
   }
 
-  /* Arrow */
+  /* Arrow rotation when submenu expanded */
   .arrow {
     font-size: 12px;
     margin-left: 5px;
+    transition: transform 0.2s;
+  }
+
+  .item-label.expanded .arrow {
+    transform: rotate(90deg);
   }
 
   /* Submenu */
@@ -159,20 +177,35 @@
     padding: 5px 8px;
     font-weight: normal;
     cursor: pointer;
-    background: transparent; /* no default background */
-    transition: background 0.2s;
+    background: transparent;
+    transition:
+      background 0.2s,
+      color 0.2s;
   }
 
   .submenu-item:hover {
-    background-color: #04a886; /* highlight only hovered item */
+    background-color: #04a886;
     color: white;
   }
 
-  /* Bottom container ensures logout stays above toggle */
+  /* Bottom container ensures logout and settings stay above toggle */
   .bottom-container {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
+  }
+
+  .bottom-items .nav-item {
+    padding: 8px;
+    cursor: pointer;
+    transition:
+      background 0.2s,
+      color 0.2s;
+  }
+
+  .bottom-items .nav-item:hover {
+    background-color: #04a886;
+    color: white;
   }
 
   /* Toggle Button */
