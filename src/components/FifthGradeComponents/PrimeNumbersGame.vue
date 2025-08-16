@@ -28,11 +28,14 @@
     name: 'PrimeNumbersGame',
     data() {
       return {
-        numbers: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+        numbers: [],
         selectedNumbers: [],
         message: '',
-        primes: [2, 3, 5, 7, 11, 13],
+        primes: [2, 3, 5, 7, 11, 13, 17, 19, 23, 29],
       }
+    },
+    created() {
+      this.generateNumbers()
     },
     methods: {
       toggleNumber(num) {
@@ -45,7 +48,9 @@
       checkAnswer() {
         const correct =
           this.selectedNumbers.every((n) => this.primes.includes(n)) &&
-          this.primes.every((p) => this.selectedNumbers.includes(p))
+          this.numbers
+            .filter((n) => this.primes.includes(n))
+            .every((p) => this.selectedNumbers.includes(p))
         this.message = correct
           ? '🎉 Correct! Well done!'
           : '❌ Some numbers are wrong. Try again.'
@@ -53,6 +58,17 @@
       resetGame() {
         this.selectedNumbers = []
         this.message = ''
+        this.generateNumbers()
+      },
+      generateNumbers() {
+        const min = 2
+        const max = 30
+        const allNumbers = []
+        while (allNumbers.length < 12) {
+          const num = Math.floor(Math.random() * (max - min + 1)) + min
+          if (!allNumbers.includes(num)) allNumbers.push(num)
+        }
+        this.numbers = allNumbers
       },
     },
   }
