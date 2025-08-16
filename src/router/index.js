@@ -17,11 +17,11 @@ const routes = [
       import('@/components/FifthGradeComponents/PrimeNumbersGame.vue'),
   },
 
-  /*{
+  {
     path: '/fifth-grade/game2',
     component: () =>
       import('@/components/FifthGradeComponents/FractionsPuzzle.vue'),
-  },
+  } /*
   {
     path: '/fifth-grade/game3',
     component: () =>
@@ -40,7 +40,7 @@ const routes = [
     path: '/fifth-grade/game6',
     component: () =>
       import('@/components/FifthGradeComponents/EquationBalance.vue'),
-  },*/
+  },*/,
 ]
 
 const router = createRouter({
