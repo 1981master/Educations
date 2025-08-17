@@ -1,38 +1,39 @@
 <template>
-  <div class="logic-maze p-6 rounded-2xl shadow-lg max-w-xl mx-auto">
-    <h2 class="text-2xl font-bold text-green-700 mb-4">🧠 Logic Maze</h2>
-    <p class="mb-4">
-      Help the robot reach the treasure! Click a valid cell to move.
-    </p>
+  <div class="logic-maze">
+    <h2>Logic Maze</h2>
+    <p>Move your avatar 🧑 to reach the goal 🎯!</p>
 
-    <!-- Maze Grid -->
     <div class="maze-grid">
-      <div
-        v-for="(row, rIndex) in maze"
-        :key="'row-' + rIndex"
-        class="maze-row"
-      >
+      <div v-for="(row, rIndex) in maze" :key="rIndex" class="maze-row">
         <div
           v-for="(cell, cIndex) in row"
-          :key="'cell-' + rIndex + '-' + cIndex"
-          :class="['maze-cell', cellClass(rIndex, cIndex)]"
-          @click="moveTo(rIndex, cIndex)"
+          :key="cIndex"
+          :class="{
+            cell: true,
+            wall: cell === 1,
+            visited: visited.some((p) => p.x === rIndex && p.y === cIndex),
+          }"
+          @click="handleClick(rIndex, cIndex)"
         >
-          <span v-if="playerPos.row === rIndex && playerPos.col === cIndex">
-            🤖
-          </span>
-          <span v-else-if="cell === 'goal'">💎</span>
+          <span v-if="player.x === rIndex && player.y === cIndex">🧑</span>
+          <span v-else-if="goal.x === rIndex && goal.y === cIndex">🎯</span>
         </div>
       </div>
     </div>
 
-    <!-- Feedback -->
-    <div v-if="message" class="message mt-3">{{ message }}</div>
+    <div class="controls">
+      <button @click="nextStep" :disabled="gameOver">Next Step</button>
+      <button @click="backStep" :disabled="selectedPath.length <= 1">
+        Back Step
+      </button>
+      <button @click="resetMaze">Reset Maze</button>
+    </div>
 
-    <!-- Actions -->
-    <div class="actions mt-4">
-      <button @click="resetMaze" class="btn">Reset</button>
-      <button @click="hintMaze" class="btn">Hint</button>
+    <div class="info">
+      <p>Steps taken: {{ player.steps }}</p>
+      <p v-if="gameOver">
+        🎉 Finished! Shortest path: {{ shortestPath.length - 1 }} steps
+      </p>
     </div>
   </div>
 </template>
@@ -44,9 +45,14 @@
       return {
         size: 10,
         maze: [],
-        playerPos: { row: 0, col: 0 },
-        message: '',
-        path: [],
+        start: { x: 0, y: 0 },
+        goal: { x: 9, y: 9 },
+        player: { x: 0, y: 0, steps: 0 },
+        selectedPath: [],
+        visited: [],
+        shortestPath: [],
+        gameOver: false,
+        wrongSound: new Audio('/wrong.mp3'),
       }
     },
     created() {
@@ -54,97 +60,102 @@
     },
     methods: {
       generateMaze() {
-        // Create empty maze with some walls
-        const newMaze = []
-        for (let i = 0; i < this.size; i++) {
-          const row = []
-          for (let j = 0; j < this.size; j++) {
-            row.push(Math.random() < 0.2 ? 'wall' : '')
-          }
-          newMaze.push(row)
-        }
-        // Set start and goal
-        newMaze[0][0] = 'start'
-        newMaze[this.size - 1][this.size - 1] = 'goal'
-        this.maze = newMaze
-        this.playerPos = { row: 0, col: 0 }
-        this.message = ''
-        this.path = []
+        do {
+          this.maze = Array.from({ length: this.size }, () =>
+            Array.from({ length: this.size }, () =>
+              Math.random() < 0.3 ? 1 : 0,
+            ),
+          )
+          this.maze[this.start.x][this.start.y] = 0
+          this.maze[this.goal.x][this.goal.y] = 0
+          this.shortestPath = this.findShortestPath(this.start, this.goal)
+        } while (!this.shortestPath || this.shortestPath.length < 2)
+        this.resetPlayer()
       },
-      cellClass(row, col) {
-        if (this.playerPos.row === row && this.playerPos.col === col)
-          return 'player'
-        if (this.maze[row][col] === 'wall') return 'wall'
-        if (this.maze[row][col] === 'goal') return 'goal'
-        if (this.path.some((p) => p.row === row && p.col === col)) return 'path'
-        return ''
-      },
-      moveTo(row, col) {
-        // Check adjacency
-        const dr = Math.abs(row - this.playerPos.row)
-        const dc = Math.abs(col - this.playerPos.col)
-        if (this.maze[row][col] === 'wall') {
-          this.message = "🚫 Can't move into wall!"
+      handleClick(x, y) {
+        if (this.gameOver) return
+        if (!this.isAdjacent(x, y) || this.maze[x][y] === 1) {
+          this.wrongSound.play()
           return
         }
-        if (dr + dc === 1) {
-          this.playerPos = { row, col }
-          this.message = ''
-          if (this.maze[row][col] === 'goal') {
-            this.message = '🎉 You reached the treasure!'
-            this.showPath()
-          }
-        } else {
-          this.message = '🚫 Click only an adjacent cell!'
+        this.movePlayer(x, y)
+      },
+      isAdjacent(x, y) {
+        const dx = Math.abs(x - this.player.x)
+        const dy = Math.abs(y - this.player.y)
+        return dx + dy === 1
+      },
+      movePlayer(x, y) {
+        this.player.x = x
+        this.player.y = y
+        this.player.steps++
+        this.selectedPath.push({ x, y })
+        this.visited.push({ x, y })
+
+        if (x === this.goal.x && y === this.goal.y) this.gameOver = true
+      },
+      nextStep() {
+        if (this.gameOver) return
+        const nextIndex = this.selectedPath.length
+        if (nextIndex < this.shortestPath.length) {
+          const next = this.shortestPath[nextIndex]
+          this.movePlayer(next.x, next.y)
         }
       },
-      showPath() {
-        // Simple BFS to highlight shortest path
-        const queue = [{ row: 0, col: 0, path: [] }]
-        const visited = Array(this.size)
-          .fill(0)
-          .map(() => Array(this.size).fill(false))
-        visited[0][0] = true
+      backStep() {
+        if (this.selectedPath.length <= 1) return
+        this.selectedPath.pop()
+        this.visited.pop()
+        const last = this.selectedPath[this.selectedPath.length - 1]
+        this.player.x = last.x
+        this.player.y = last.y
+        this.player.steps--
+        this.gameOver = false
+      },
+      resetMaze() {
+        this.generateMaze()
+        this.visited = [{ ...this.start }]
+        this.selectedPath = [{ ...this.start }]
+      },
+      resetPlayer() {
+        this.player = { x: this.start.x, y: this.start.y, steps: 0 }
+        this.visited = [{ ...this.start }]
+        this.selectedPath = [{ ...this.start }]
+        this.gameOver = false
+      },
+      findShortestPath(start, goal) {
+        const queue = [[start]]
+        const visitedArr = Array.from({ length: this.size }, () =>
+          Array.from({ length: this.size }, () => false),
+        )
+        visitedArr[start.x][start.y] = true
 
         while (queue.length) {
-          const current = queue.shift()
-          const { row, col, path } = current
-          const newPath = [...path, { row, col }]
-
-          if (row === this.size - 1 && col === this.size - 1) {
-            this.path = newPath
-            return
-          }
-
-          const dirs = [
+          const path = queue.shift()
+          const current = path[path.length - 1]
+          if (current.x === goal.x && current.y === goal.y) return path
+          ;[
             [0, 1],
             [1, 0],
             [0, -1],
             [-1, 0],
-          ]
-          for (const [dr, dc] of dirs) {
-            const nr = row + dr
-            const nc = col + dc
+          ].forEach(([dx, dy]) => {
+            const nx = current.x + dx
+            const ny = current.y + dy
             if (
-              nr >= 0 &&
-              nr < this.size &&
-              nc >= 0 &&
-              nc < this.size &&
-              !visited[nr][nc] &&
-              this.maze[nr][nc] !== 'wall'
+              nx >= 0 &&
+              nx < this.size &&
+              ny >= 0 &&
+              ny < this.size &&
+              !visitedArr[nx][ny] &&
+              this.maze[nx][ny] === 0
             ) {
-              visited[nr][nc] = true
-              queue.push({ row: nr, col: nc, path: newPath })
+              visitedArr[nx][ny] = true
+              queue.push([...path, { x: nx, y: ny }])
             }
-          }
+          })
         }
-      },
-      resetMaze() {
-        this.generateMaze()
-      },
-      hintMaze() {
-        this.showPath()
-        this.message = '💡 Highlighted the shortest path!'
+        return null
       },
     },
   }
@@ -152,53 +163,68 @@
 
 <style scoped>
   .logic-maze {
-    background: #f0fff4;
-    border: 2px solid #34d399;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
+
   .maze-grid {
     display: grid;
+    grid-template-rows: repeat(10, 40px);
     gap: 2px;
-    margin-bottom: 10px;
   }
+
   .maze-row {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(10, 40px);
+    gap: 2px;
   }
-  .maze-cell {
+
+  .cell {
     width: 40px;
     height: 40px;
-    border: 1px solid #34d399;
+    border: 1px solid #999;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 20px;
-    cursor: pointer;
     transition: background 0.2s;
+    background-color: #fff;
   }
-  .maze-cell.player {
-    background-color: #6ee7b7;
+
+  .cell.wall {
+    background-color: #333;
   }
-  .maze-cell.wall {
-    background-color: #9ca3af;
+
+  .cell.visited {
+    background-color: #6fd2be;
   }
-  .maze-cell.goal {
-    background-color: #fcd34d;
+
+  .controls {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
   }
-  .maze-cell.path {
-    background-color: #d9f99d;
-  }
-  .btn {
-    background: #10b981;
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
+
+  .controls button {
+    padding: 8px 16px;
+    border-radius: 4px;
+    border: 1px solid #0bbb98;
+    background-color: #fff;
     font-weight: bold;
-    margin-right: 5px;
-    transition: 0.3s;
+    cursor: pointer;
+    transition:
+      background 0.2s,
+      color 0.2s;
   }
-  .btn:hover {
-    background: #059669;
+
+  .controls button:hover {
+    background-color: #06977a;
+    color: #fff;
   }
-  .message {
+
+  .info {
+    margin-top: 15px;
     font-weight: bold;
   }
 </style>

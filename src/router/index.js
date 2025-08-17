@@ -11,12 +11,13 @@ const routes = [
   { path: '/first-grade', name: 'FirstGrade', component: FirstGradeGame },
   { path: '/triangles', name: 'Triangles', component: TriangleCountGame },
   { path: '/shapepuzzle', name: 'ShapePuzzle', component: ShapePuzzle },
+
+  // Fifth Grade Games
   {
     path: '/fifth-grade/game1',
     component: () =>
       import('@/components/FifthGradeComponents/PrimeNumbersGame.vue'),
   },
-
   {
     path: '/fifth-grade/game2',
     component: () =>
@@ -41,8 +42,6 @@ const routes = [
     component: () =>
       import('@/components/FifthGradeComponents/EquationBalance.vue'),
   },*/,
-  ,
-  ,
 ]
 
 const router = createRouter({
