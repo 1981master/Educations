@@ -14,19 +14,25 @@
             position: 'top',
             children: [
               { label: 'Prime Numbers', route: '/fifth-grade/game1' },
-              {
-                label: 'Fractions Puzzle',
-                route: '/fifth-grade/game2',
-              },
-              {
-                label: 'Geometry Explorer',
-                route: '/fifth-grade/game3',
-              },
-              { label: ' Math Riddles', route: '/fifth-grade/game4' },
+              { label: 'Fractions Puzzle', route: '/fifth-grade/game2' },
+              { label: 'Geometry Explorer', route: '/fifth-grade/game3' },
+              { label: 'Math Riddles', route: '/fifth-grade/game4' },
               { label: 'Logic Maze', route: '/fifth-grade/game5' },
+              { label: 'Equation Balance', route: '/fifth-grade/game6' },
+              { label: 'Fraction Pizza Maker 🍕', route: '/fifth-grade/game7' },
+              { label: 'Multiplication Race 🚗', route: '/fifth-grade/game8' },
+              { label: 'Decimal Quest 🏰', route: '/fifth-grade/game9' },
               {
-                label: 'Equation Balance',
-                route: '/fifth-grade/game6',
+                label: 'Percentage Treasure Hunt 💎',
+                route: '/fifth-grade/game10',
+              },
+              {
+                label: 'Coordinate Battleship ⚓',
+                route: '/fifth-grade/game11',
+              },
+              {
+                label: 'Word Problem Escape Room 🔐',
+                route: '/fifth-grade/game12',
               },
             ],
           },

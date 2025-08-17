@@ -42,6 +42,21 @@ const routes = [
     component: () =>
       import('@/components/FifthGradeComponents/EquationBalance.vue'),
   },
+  {
+    path: '/fifth-grade/game7',
+    component: () =>
+      import('@/components/FifthGradeComponents/FractionPizza.vue'),
+  },
+  {
+    path: '/fifth-grade/game8',
+    component: () =>
+      import('@/components/FifthGradeComponents/MultiplicationRace.vue'),
+  },
+  {
+    path: '/fifth-grade/game9',
+    component: () =>
+      import('@/components/FifthGradeComponents/DecimalQuest.vue'),
+  },
 ]
 
 const router = createRouter({
