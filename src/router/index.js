@@ -36,12 +36,12 @@ const routes = [
   {
     path: '/fifth-grade/game5',
     component: () => import('@/components/FifthGradeComponents/LogicMaze.vue'),
-  } /*
+  },
   {
     path: '/fifth-grade/game6',
     component: () =>
       import('@/components/FifthGradeComponents/EquationBalance.vue'),
-  },*/,
+  },
 ]
 
 const router = createRouter({
