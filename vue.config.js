@@ -15,7 +15,7 @@ module.exports = defineConfig({
         nsis: {
           oneClick: false,
           allowToChangeInstallationDirectory: true,
-          createDesktopShortcut: 'prompt',
+          createDesktopShortcut: true,
           createStartMenuShortcut: true,
           installerIcon: 'public/icons/app.ico',
           uninstallerIcon: 'public/icons/app.ico',
