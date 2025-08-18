@@ -1,6 +1,10 @@
 <template>
   <div id="app" class="app-container">
-    <header>{{ user }} Grade {{ grade }} Dashboard</header>
+    <header>
+      <img src="@/assets/app.png" alt="App Icon" class="app-icon" />
+      {{ user }} Grade {{ grade }} Dashboard
+      <span class="sparkle">✨</span>
+    </header>
 
     <main>
       <NavbarComponent
@@ -52,7 +56,6 @@
         @itemClick="handleItemClick"
       />
 
-      <!-- Main content rendered via routing -->
       <div class="content-area">
         <router-view />
       </div>
@@ -82,7 +85,6 @@
       handleItemClick(item) {
         if (item.route) {
           this.$router.push(item.route)
-        } else {
         }
       },
     },
@@ -117,6 +119,48 @@
     text-align: center;
     font-size: 28px;
     font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border-bottom: 5px dashed #05a17d;
+    position: relative;
+  }
+
+  header .app-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    animation: bounce 1s infinite alternate;
+  }
+
+  header .sparkle {
+    font-size: 32px;
+    animation: sparkle 1.5s infinite;
+  }
+
+  @keyframes bounce {
+    0% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes sparkle {
+    0%,
+    100% {
+      opacity: 0.3;
+      transform: scale(0.8) rotate(0deg);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.2) rotate(20deg);
+    }
   }
 
   main {
