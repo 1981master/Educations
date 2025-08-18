@@ -1,88 +1,89 @@
 <template>
   <div class="battleship-game">
-    <h2>Coordinate Battleship</h2>
-    <p>Click the squares to find all hidden ships!</p>
+    <h2>Fun Battleship!</h2>
+    <p>Find all the hidden ships!</p>
 
     <div class="grid">
-      <div
-        v-for="(cell, index) in grid"
-        :key="index"
-        class="cell"
-        :class="{
-          hit: cell.status === 'hit',
-          miss: cell.status === 'miss',
-        }"
-        @click="attackCell(index)"
-      >
-        {{ cell.status === 'hit' ? '💥' : cell.status === 'miss' ? '❌' : '' }}
+      <div v-for="(row, rIndex) in board" :key="rIndex" class="row">
+        <div
+          v-for="(cell, cIndex) in row"
+          :key="cIndex"
+          class="cell"
+          :class="{
+            hit: cell.hit && cell.hasShip,
+            miss: cell.hit && !cell.hasShip,
+          }"
+          @click="attackCell(rIndex, cIndex)"
+        >
+          {{ cell.hit && cell.hasShip ? '💥' : cell.hit ? '💦' : '' }}
+        </div>
       </div>
     </div>
 
     <div class="info">
-      <p>{{ message }}</p>
-      <p>
-        Attempts: {{ attempts }} | Ships found: {{ shipsFound }}/{{
-          totalShips
-        }}
-      </p>
-      <button @click="resetGame">Reset</button>
+      <p>Score: {{ score }} / {{ totalShips }}</p>
     </div>
+
+    <button @click="resetGame" class="reset-btn">Reset Game</button>
   </div>
 </template>
 
 <script>
   export default {
-    name: 'CoordinateBattleship',
+    name: 'FunBattleship',
     data() {
       return {
-        rows: 5,
-        cols: 5,
-        totalShips: 5,
-        grid: [],
-        shipPositions: [],
-        attempts: 0,
-        shipsFound: 0,
-        message: '',
+        rows: 10,
+        cols: 10,
+        totalShips: 7,
+        board: [],
+        ships: [],
+        score: 0,
       }
     },
     created() {
-      this.initGame()
+      this.resetGame()
     },
     methods: {
-      initGame() {
-        this.grid = Array(this.rows * this.cols)
-          .fill()
-          .map(() => ({ status: null }))
-
-        const positions = new Set()
-        while (positions.size < this.totalShips) {
-          positions.add(Math.floor(Math.random() * this.rows * this.cols))
+      generateBoard() {
+        const board = []
+        for (let r = 0; r < this.rows; r++) {
+          const row = []
+          for (let c = 0; c < this.cols; c++) {
+            row.push({ hit: false, hasShip: false })
+          }
+          board.push(row)
         }
-        this.shipPositions = Array.from(positions)
-
-        this.attempts = 0
-        this.shipsFound = 0
-        this.message = ''
+        return board
       },
-      attackCell(index) {
-        if (this.grid[index].status) return
-
-        this.attempts++
-        if (this.shipPositions.includes(index)) {
-          this.grid[index].status = 'hit'
-          this.shipsFound++
-          this.message = '🎉 Hit! Keep going!'
-        } else {
-          this.grid[index].status = 'miss'
-          this.message = '❌ Miss! Try again!'
+      placeShips() {
+        this.ships = []
+        let placed = 0
+        while (placed < this.totalShips) {
+          const r = Math.floor(Math.random() * this.rows)
+          const c = Math.floor(Math.random() * this.cols)
+          if (!this.board[r][c].hasShip) {
+            this.board[r][c].hasShip = true
+            this.ships.push({ row: r, col: c })
+            placed++
+          }
         }
-
-        if (this.shipsFound === this.totalShips) {
-          this.message = `🏆 All ships found in ${this.attempts} attempts!`
+      },
+      attackCell(r, c) {
+        const cell = this.board[r][c]
+        if (cell.hit) return
+        cell.hit = true
+        if (cell.hasShip) {
+          this.score++
+        }
+        if (this.score === this.totalShips) {
+          alert('🎉 Congratulations! You found all the ships!')
         }
       },
       resetGame() {
-        this.initGame()
+        this.board = this.generateBoard()
+        this.score = 0
+        this.placeShips()
       },
     },
   }
@@ -105,21 +106,21 @@
 
   .grid {
     display: grid;
-    grid-template-columns: repeat(5, 70px);
+    grid-template-columns: repeat(10, 40px);
     gap: 5px;
     margin: 20px 0;
   }
 
   .cell {
-    width: 70px;
-    height: 70px;
-    border-radius: 10px;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
     border: 2px solid #6fd2be;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    font-size: 28px;
+    font-size: 24px;
     background: #e0f7f4;
     transition:
       transform 0.2s,
@@ -134,13 +135,11 @@
   .cell.hit {
     background-color: #4caf50;
     color: white;
-    font-size: 32px;
   }
 
   .cell.miss {
     background-color: #f28b82;
     color: white;
-    font-size: 32px;
   }
 
   .info {
@@ -149,7 +148,7 @@
     align-items: center;
   }
 
-  .info button {
+  .reset-btn {
     margin-top: 10px;
     padding: 10px 20px;
     cursor: pointer;
@@ -164,7 +163,7 @@
       transform 0.2s;
   }
 
-  .info button:hover {
+  .reset-btn:hover {
     background-color: #06977a;
     transform: scale(1.05);
   }
