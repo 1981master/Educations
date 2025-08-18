@@ -62,6 +62,11 @@ const routes = [
     component: () =>
       import('@/components/FifthGradeComponents/CoordinateBattleship.vue'),
   },
+  {
+    path: '/fifth-grade/game13',
+    component: () =>
+      import('@/components/FifthGradeComponents/DinosaurExplorer.vue'),
+  },
 ]
 
 const router = createRouter({

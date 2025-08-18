@@ -34,6 +34,10 @@
                 label: 'Word Problem Escape Room 🔐',
                 route: '/fifth-grade/game12',
               },
+              {
+                label: 'Word Problem Escape Room 🔐',
+                route: '/fifth-grade/game13',
+              },
             ],
           },
           { label: 'Settings', position: 'bottom', route: '/settings' },
