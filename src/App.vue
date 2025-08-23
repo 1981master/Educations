@@ -68,6 +68,10 @@
                 label: 'Reading Explorer',
                 route: '/fifth-grade/game15',
               },
+              {
+                label: 'Math Play Ground',
+                route: '/fifth-grade/game16',
+              },
             ],
           },
           { label: 'Settings', position: 'bottom', route: '/settings' },
