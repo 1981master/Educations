@@ -12,7 +12,21 @@
           { label: 'Dashboard', position: 'top', route: '/' },
           { label: 'Kinder Garden', position: 'top', route: '/kindergarten' },
           { label: 'Profile', position: 'top', route: '/profile' },
-          { label: 'First Grade', position: 'top', route: '/first-grade' },
+          {
+            label: 'First Grade',
+            position: 'top',
+            route: '/first-grade',
+            children: [
+              {
+                label: 'Word Problem Escape Room 🔐',
+                route: '/fifth-grade/game13',
+              },
+              {
+                label: 'Trinagle Game',
+                route: '/first-grade',
+              },
+            ],
+          },
           {
             label: 'Fifth Grade',
             position: 'top',

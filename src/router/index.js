@@ -2,11 +2,13 @@ import ShapePuzzle from '@/components/views/ShapePuzzle.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import EmojiGame from '../components/FirstGradeComponents/EmojiGame.vue'
 import Dashboard from '../components/views/Dashboard.vue'
-import FirstGradeGame from '../components/views/FirstGradeGame.vue'
-import TriangleCountGame from '../components/views/TriangleCountGame.vue'
+import FirstGradeGame from '../components/FirstGradeComponents/FirstGradeGame.vue'
+import TriangleCountGame from '../components/FirstGradeComponents/TriangleCountGame.vue'
+import Profile from '../components/views/Profile.vue'
 
 const routes = [
   { path: '/', name: 'Dashboard', component: Dashboard },
+  { path: '/profile', name: 'profile', component: Profile },
   { path: '/kindergarten', name: 'Kindergarten', component: EmojiGame },
   { path: '/first-grade', name: 'FirstGrade', component: FirstGradeGame },
   { path: '/triangles', name: 'Triangles', component: TriangleCountGame },
@@ -65,7 +67,7 @@ const routes = [
   {
     path: '/fifth-grade/game13',
     component: () =>
-      import('@/components/FifthGradeComponents/DinosaurExplorer.vue'),
+      import('@/components/FirstGradeComponents/DinosaurExplorer.vue'),
   },
 ]
 
