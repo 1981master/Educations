@@ -5,6 +5,7 @@ import Dashboard from '../components/views/Dashboard.vue'
 import FirstGradeGame from '../components/FirstGradeComponents/FirstGradeGame.vue'
 import TriangleCountGame from '../components/FirstGradeComponents/TriangleCountGame.vue'
 import Profile from '../components/views/Profile.vue'
+import AnimalExplorer from '../components/FirstGradeComponents/AnimalExplorer.vue'
 
 const routes = [
   { path: '/', name: 'Dashboard', component: Dashboard },
@@ -13,6 +14,11 @@ const routes = [
   { path: '/first-grade', name: 'FirstGrade', component: FirstGradeGame },
   { path: '/triangles', name: 'Triangles', component: TriangleCountGame },
   { path: '/shapepuzzle', name: 'ShapePuzzle', component: ShapePuzzle },
+  {
+    path: '/animalExplorer',
+    name: 'AnimalExplorer',
+    component: AnimalExplorer,
+  },
 
   // Fifth Grade Games
   {
@@ -68,6 +74,16 @@ const routes = [
     path: '/fifth-grade/game13',
     component: () =>
       import('@/components/FirstGradeComponents/DinosaurExplorer.vue'),
+  },
+  {
+    path: '/fifth-grade/game14',
+    component: () =>
+      import('@/components/FifthGradeComponents/ScienceExplorer.vue'),
+  },
+  {
+    path: '/fifth-grade/game15',
+    component: () =>
+      import('@/components/FifthGradeComponents/ReadingExplorer.vue'),
   },
 ]
 

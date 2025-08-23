@@ -18,12 +18,16 @@
             route: '/first-grade',
             children: [
               {
-                label: 'Word Problem Escape Room 🔐',
+                label: 'Diosaur Explorer 🔐',
                 route: '/fifth-grade/game13',
               },
               {
                 label: 'Trinagle Game',
                 route: '/first-grade',
+              },
+              {
+                label: 'Animal Explorer',
+                route: '/animalExplorer',
               },
             ],
           },
@@ -55,6 +59,14 @@
               {
                 label: 'Word Problem Escape Room 🔐',
                 route: '/fifth-grade/game13',
+              },
+              {
+                label: 'Science Exploere',
+                route: '/fifth-grade/game14',
+              },
+              {
+                label: 'Reading Explorer',
+                route: '/fifth-grade/game15',
               },
             ],
           },
