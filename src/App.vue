@@ -1,34 +1,62 @@
 <template>
   <div id="app" class="app-container">
-    <header>
-      <img src="@/assets/app.png" alt="App Icon" class="app-icon" />
-      {{ user }} Grade {{ grade }} Dashboard
-      <span class="sparkle">✨</span>
-    </header>
+    <!-- If logged in: show full layout -->
+    <template v-if="isLoggedIn">
+      <header>
+        <img src="@/assets/app.png" alt="App Icon" class="app-icon" />
+        {{ user }} Grade {{ grade }} Dashboard
+        <span class="sparkle">✨</span>
+      </header>
 
-    <main>
-      <NavbarComponent
-        :itemsData="[
-          { label: 'Dashboard', position: 'top', route: '/' },
+      <main>
+        <NavbarComponent
+          :itemsData="menuItems"
+          backgroundColor="#6fd2be"
+          textColor="#fff"
+          hoverColor="#06977a"
+          width="220px"
+          collapsedWidth="60px"
+          itemFontSize="18px"
+          @itemClick="handleItemClick"
+        />
+        <div class="content-area">
+          <router-view />
+        </div>
+      </main>
+
+      <footer>&copy; 2025 Master Learning &trade;. All rights reserved.</footer>
+    </template>
+
+    <!-- If not logged in: show login page -->
+    <template v-else>
+      <Login v-if="!isLoggedIn" @loginSuccess="isLoggedIn = true" />
+    </template>
+  </div>
+</template>
+
+<script>
+  import NavbarComponent from './components/NavbarComponent.vue'
+  import Login from './components/views/login.vue'
+
+  export default {
+    name: 'App',
+    components: { NavbarComponent, Login },
+    data() {
+      return {
+        isLoggedIn: !!localStorage.getItem('authToken'),
+        user: localStorage.getItem('username') || '',
+        grade: localStorage.getItem('grade') || '',
+        menuItems: [
+          { label: 'Dashboard', position: 'top', route: '/dashboard' },
           { label: 'Kinder Garden', position: 'top', route: '/kindergarten' },
           { label: 'Profile', position: 'top', route: '/profile' },
           {
             label: 'First Grade',
             position: 'top',
-            route: '/first-grade',
             children: [
-              {
-                label: 'Diosaur Explorer 🔐',
-                route: '/fifth-grade/game13',
-              },
-              {
-                label: 'Trinagle Game',
-                route: '/first-grade',
-              },
-              {
-                label: 'Animal Explorer',
-                route: '/animalExplorer',
-              },
+              { label: 'Diosaur Explorer 🔐', route: '/fifth-grade/game13' },
+              { label: 'Trinagle Game', route: '/first-grade' },
+              { label: 'Animal Explorer', route: '/animalExplorer' },
             ],
           },
           {
@@ -60,62 +88,30 @@
                 label: 'Word Problem Escape Room 🔐',
                 route: '/fifth-grade/game13',
               },
-              {
-                label: 'Science Exploere',
-                route: '/fifth-grade/game14',
-              },
-              {
-                label: 'Reading Explorer',
-                route: '/fifth-grade/game15',
-              },
-              {
-                label: 'Math Play Ground',
-                route: '/fifth-grade/game16',
-              },
+              { label: 'Science Exploere', route: '/fifth-grade/game14' },
+              { label: 'Reading Explorer', route: '/fifth-grade/game15' },
+              { label: 'Math Play Ground', route: '/fifth-grade/game16' },
             ],
           },
           { label: 'Settings', position: 'bottom', route: '/settings' },
-          { label: 'Logout', position: 'bottom' },
-        ]"
-        backgroundColor="#6fd2be"
-        textColor="#fff"
-        hoverColor="#06977a"
-        width="220px"
-        collapsedWidth="60px"
-        itemFontSize="18px"
-        @itemClick="handleItemClick"
-      />
-
-      <div class="content-area">
-        <router-view />
-      </div>
-    </main>
-
-    <footer>&copy; 2025 Master Learning &trade;. All rights reserved.</footer>
-  </div>
-</template>
-
-<script>
-  import EmojiGame from './components/FirstGradeComponents/EmojiGame.vue'
-  import NavbarComponent from './components/NavbarComponent.vue'
-
-  export default {
-    name: 'App',
-    components: {
-      NavbarComponent,
-      EmojiGame,
-    },
-    data() {
-      return {
-        user: 'User',
-        grade: 'Five',
+          { label: 'Logout', position: 'bottom', route: '/logout' },
+        ],
       }
     },
     methods: {
       handleItemClick(item) {
-        if (item.route) {
+        if (item.route === '/logout') {
+          this.logout()
+        } else if (item.route) {
           this.$router.push(item.route)
         }
+      },
+      logout() {
+        this.isLoggedIn = false
+        this.user = ''
+        this.grade = ''
+        localStorage.clear()
+        this.$router.push('/login')
       },
     },
   }

@@ -92,6 +92,7 @@
               fact: 'Some detect heat to hunt!',
               extraInfo: [{ emoji: '👀', text: 'Heat-sensing pits' }],
             },
+
             {
               name: 'Turtle',
               emoji: '🐢',
@@ -99,8 +100,43 @@
               diet: 'Herbivore',
               habitat: 'Ponds',
               fact: 'Can live for decades!',
-              extraInfo: [{ emoji: '🛡️', text: 'Hard shell for protection' }],
+              extraInfo: [
+                { emoji: '🛡️', text: 'Hard shell for protection' },
+                {
+                  emoji: '🌱',
+                  text: 'Baby turtles (hatchlings) eat insects, algae, and small plants.',
+                },
+                {
+                  emoji: '🍃',
+                  text: 'Juveniles start eating more plants like leaves, grasses, and aquatic vegetation.',
+                },
+                {
+                  emoji: '🥗',
+                  text: 'Adult turtles are mainly herbivores, enjoying water plants, fruits, and leafy greens.',
+                },
+                {
+                  emoji: '🌡️',
+                  text: 'They thrive in water between 75–86°F (24–30°C), which helps digestion and movement.',
+                },
+                {
+                  emoji: '🌊',
+                  text: 'Turtles live in ponds, lakes, and rivers with calm, fresh water and sunny basking spots.',
+                },
+                {
+                  emoji: '🐠',
+                  text: 'They can share habitats with small fish, frogs, and insects if the space has enough food.',
+                },
+                {
+                  emoji: '🍼',
+                  text: 'Life cycle: Egg → Hatchling → Juvenile → Adult → Some live 50–80 years or more!',
+                },
+                {
+                  emoji: '💡',
+                  text: 'Fun fact: Sea turtles migrate thousands of miles and always return to the same beach to lay eggs.',
+                },
+              ],
             },
+
             {
               name: 'Lizard',
               emoji: '🦎',
@@ -306,20 +342,29 @@
 
   .animal-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 15px;
+    grid-template-columns: repeat(
+      auto-fit,
+      minmax(280px, 1fr)
+    ); /* wider cards */
+    gap: 25px;
     margin-top: 10px;
+    justify-items: center; /* centers cards */
   }
 
   .animal-card {
     background: #fff8e7;
     border-radius: 20px;
-    padding: 15px;
+    padding: 30px;
     cursor: pointer;
     transition:
       transform 0.2s ease,
       box-shadow 0.2s ease;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+
+    /* remove width % so grid decides */
+    width: 100%;
+    max-width: 350px; /* cap so it won’t get too giant */
+    text-align: center;
   }
 
   .animal-card:hover {

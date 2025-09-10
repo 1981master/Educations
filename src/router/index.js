@@ -1,15 +1,18 @@
+import Login from '@/components/views/login.vue'
 import ShapePuzzle from '@/components/views/ShapePuzzle.vue'
+import Signup from '@/components/views/Signup.vue'
 import { createRouter, createWebHistory } from 'vue-router'
+import AnimalExplorer from '../components/FirstGradeComponents/AnimalExplorer.vue'
 import EmojiGame from '../components/FirstGradeComponents/EmojiGame.vue'
-import Dashboard from '../components/views/Dashboard.vue'
 import FirstGradeGame from '../components/FirstGradeComponents/FirstGradeGame.vue'
 import TriangleCountGame from '../components/FirstGradeComponents/TriangleCountGame.vue'
+import Dashboard from '../components/views/Dashboard.vue'
 import Profile from '../components/views/Profile.vue'
-import AnimalExplorer from '../components/FirstGradeComponents/AnimalExplorer.vue'
-import MathPlayground from '../components/FifthGradeComponents/MathPlayground.vue'
-
 const routes = [
-  { path: '/', name: 'Dashboard', component: Dashboard },
+  { path: '/', name: 'login2', component: Login },
+  { path: '/login', name: 'login', component: Login },
+  { path: '/signup', name: 'signup', component: Signup },
+  { path: '/dashboard', name: 'Dashboard', component: Dashboard },
   { path: '/profile', name: 'profile', component: Profile },
   { path: '/kindergarten', name: 'Kindergarten', component: EmojiGame },
   { path: '/first-grade', name: 'FirstGrade', component: FirstGradeGame },
