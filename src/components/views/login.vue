@@ -45,7 +45,8 @@
     <!-- Footer -->
     <footer class="footer">
       <p>
-        © {{ new Date().getFullYear() }} Osly. Making shopping fun & safe 🎉
+        © {{ new Date().getFullYear() }} Practice Master Learning &trade;. All
+        rights reserved. 🎉
       </p>
     </footer>
 

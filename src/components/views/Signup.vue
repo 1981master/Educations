@@ -2,7 +2,9 @@
   <div class="signup-page">
     <!-- Header -->
     <header class="header">
-      <h2>Osly Online Shop</h2>
+      <h2>
+        Practice & Master Learning A fun way of Practice for kids & parents
+      </h2>
     </header>
 
     <!-- Form Container -->
@@ -65,7 +67,10 @@
 
     <!-- Footer -->
     <footer class="footer">
-      <p>© {{ new Date().getFullYear() }} Osly. All rights reserved.</p>
+      <p>
+        © {{ new Date().getFullYear() }} Practice Master Learning ™. All
+        rights reserved.
+      </p>
     </footer>
 
     <!-- Verification / Error Modal -->

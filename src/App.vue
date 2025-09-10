@@ -1,46 +1,44 @@
 <template>
   <div id="app" class="app-container">
-    <!-- If logged in: show full layout -->
-    <template v-if="isLoggedIn">
-      <header>
-        <img src="@/assets/app.png" alt="App Icon" class="app-icon" />
-        {{ user }} Grade {{ grade }} Dashboard
-        <span class="sparkle">✨</span>
-      </header>
+    <!-- Header + Navbar only if logged in -->
+    <header v-if="isLoggedIn">
+      <img src="@/assets/app.png" alt="App Icon" class="app-icon" />
+      {{ user }} Grade {{ grade }} Dashboard
+      <span class="sparkle">✨</span>
+    </header>
 
-      <main>
-        <NavbarComponent
-          :itemsData="menuItems"
-          backgroundColor="#6fd2be"
-          textColor="#fff"
-          hoverColor="#06977a"
-          width="220px"
-          collapsedWidth="60px"
-          itemFontSize="18px"
-          @itemClick="handleItemClick"
-        />
-        <div class="content-area">
-          <router-view />
-        </div>
-      </main>
+    <main>
+      <NavbarComponent
+        v-if="isLoggedIn"
+        :itemsData="menuItems"
+        backgroundColor="#6fd2be"
+        textColor="#fff"
+        hoverColor="#06977a"
+        width="220px"
+        collapsedWidth="60px"
+        itemFontSize="18px"
+        @itemClick="handleItemClick"
+      />
 
-      <footer>&copy; 2025 Master Learning &trade;. All rights reserved.</footer>
-    </template>
+      <!-- Router outlet always visible -->
+      <div class="content-area">
+        <router-view @loginSuccess="isLoggedIn = true" />
+      </div>
+    </main>
 
-    <!-- If not logged in: show login page -->
-    <template v-else>
-      <Login v-if="!isLoggedIn" @loginSuccess="isLoggedIn = true" />
-    </template>
+    <footer v-if="isLoggedIn">
+      © {{ new Date().getFullYear() }} Practice Master Learning &trade;. All
+      rights reserved.
+    </footer>
   </div>
 </template>
 
 <script>
   import NavbarComponent from './components/NavbarComponent.vue'
-  import Login from './components/views/login.vue'
 
   export default {
     name: 'App',
-    components: { NavbarComponent, Login },
+    components: { NavbarComponent },
     data() {
       return {
         isLoggedIn: !!localStorage.getItem('authToken'),
