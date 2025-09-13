@@ -80,10 +80,6 @@
               },
               {
                 label: 'Word Problem Escape Room 🔐',
-                route: '/fifth-grade/game12',
-              },
-              {
-                label: 'Word Problem Escape Room 🔐',
                 route: '/fifth-grade/game13',
               },
               { label: 'Science Exploere', route: '/fifth-grade/game14' },

@@ -122,7 +122,7 @@
     },
     methods: {
       login() {
-        this.$router.push('/login') // Fixed routing
+        this.$router.push('/login')
       },
       async onFinish() {
         const { username, email, password, confirmPassword } = this.form
