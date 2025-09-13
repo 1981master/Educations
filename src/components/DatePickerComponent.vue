@@ -2,7 +2,7 @@
   <div class="date-picker-wrapper" :style="{ width: width + 'px' }">
     <label v-if="label" :for="id" class="date-label">{{ label }}</label>
 
-    <div class="date-input-container" :style="inputStyle">
+    <div class="date-input-container">
       <input
         v-if="!range"
         :id="id"
@@ -10,11 +10,7 @@
         :value="modelValue"
         :placeholder="placeholder"
         @input="updateValue($event.target.value)"
-        :style="{
-          color: color,
-          fontSize: fontSize + 'px',
-          height: height + 'px',
-        }"
+        class="date-input"
       />
 
       <div v-else class="range-wrapper">
@@ -22,22 +18,14 @@
           type="date"
           :value="rangeStart"
           @input="updateRange('start', $event.target.value)"
-          :style="{
-            color: color,
-            fontSize: fontSize + 'px',
-            height: height + 'px',
-          }"
+          class="date-input"
         />
         <span class="range-separator">to</span>
         <input
           type="date"
           :value="rangeEnd"
           @input="updateRange('end', $event.target.value)"
-          :style="{
-            color: color,
-            fontSize: fontSize + 'px',
-            height: height + 'px',
-          }"
+          class="date-input"
         />
       </div>
     </div>
@@ -55,7 +43,6 @@
       width: { type: Number, default: 200 },
       height: { type: Number, default: 35 },
       fontSize: { type: Number, default: 14 },
-      color: { type: String, default: '#000' },
       id: { type: String, default: '' },
     },
     data() {
@@ -80,15 +67,6 @@
         this.$emit('update:modelValue', [this.rangeStart, this.rangeEnd])
       },
     },
-    computed: {
-      inputStyle() {
-        return {
-          display: 'flex',
-          alignItems: 'center',
-          gap: '5px',
-        }
-      },
-    },
   }
 </script>
 
@@ -101,15 +79,43 @@
   .date-label {
     margin-bottom: 5px;
     font-weight: bold;
+    color: #333;
+  }
+
+  /* Input container */
+  .date-input-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Single date or range inputs */
+  .date-input {
+    padding: 4px 8px;
+    font-size: 14px;
+    height: 35px;
+    border: none;
+    border-radius: 6px;
+    background-color: #0bbb98; /* Table header color */
+    color: white;
+    outline: none;
+    transition:
+      background-color 0.2s,
+      box-shadow 0.2s;
+  }
+
+  .date-input:hover {
+    background-color: #099f80;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   }
 
   .range-wrapper {
     display: flex;
     align-items: center;
+    gap: 5px;
   }
 
   .range-separator {
-    margin: 0 5px;
     font-weight: bold;
+    color: #333;
   }
 </style>

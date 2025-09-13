@@ -3,16 +3,25 @@
     <label v-if="label" class="select-label">{{ label }}</label>
     <div class="select-box" @click="toggleDropdown">
       <div class="selected-tags">
-        <span v-for="item in selected" :key="item.value" class="tag">
+        <!-- Multiple selection tags -->
+        <span
+          v-if="multiple"
+          v-for="item in selected"
+          :key="item.value"
+          class="tag"
+        >
           {{ item.label }}
           <span class="remove-tag" @click.stop="removeItem(item)">×</span>
         </span>
-        <span v-if="selected.length === 0" class="placeholder">
-          {{ placeholder }}
+
+        <!-- Single selection display -->
+        <span v-else>
+          {{ selected ? selected.label : placeholder }}
         </span>
       </div>
       <span class="arrow">{{ showDropdown ? '▲' : '▼' }}</span>
     </div>
+
     <ul v-show="showDropdown" class="options-list">
       <li
         v-for="option in options"
@@ -30,7 +39,7 @@
   export default {
     name: 'SelectComponent',
     props: {
-      modelValue: { type: Array, default: () => [] },
+      modelValue: { type: [Array, String, Number], default: () => [] },
       options: { type: Array, required: true },
       multiple: { type: Boolean, default: false },
       placeholder: { type: String, default: 'Select...' },
@@ -39,13 +48,22 @@
     },
     data() {
       return {
-        selected: this.modelValue,
+        selected: this.multiple
+          ? Array.isArray(this.modelValue)
+            ? this.modelValue
+            : []
+          : this.options.find((opt) => opt.value === this.modelValue) || null,
         showDropdown: false,
       }
     },
     watch: {
       modelValue(newVal) {
-        this.selected = newVal
+        if (this.multiple) {
+          this.selected = Array.isArray(newVal) ? newVal : []
+        } else {
+          this.selected =
+            this.options.find((opt) => opt.value === newVal) || null
+        }
       },
     },
     methods: {
@@ -53,7 +71,11 @@
         this.showDropdown = !this.showDropdown
       },
       isSelected(option) {
-        return this.selected.findIndex((i) => i.value === option.value) !== -1
+        if (this.multiple) {
+          return this.selected.findIndex((i) => i.value === option.value) !== -1
+        } else {
+          return this.selected && this.selected.value === option.value
+        }
       },
       selectOption(option) {
         if (this.multiple) {
@@ -66,14 +88,16 @@
           }
           this.$emit('update:modelValue', [...this.selected])
         } else {
-          this.selected = [option]
-          this.$emit('update:modelValue', option)
+          this.selected = option
+          this.$emit('update:modelValue', option.value)
           this.showDropdown = false
         }
       },
       removeItem(item) {
-        this.selected = this.selected.filter((i) => i.value !== item.value)
-        this.$emit('update:modelValue', [...this.selected])
+        if (this.multiple) {
+          this.selected = this.selected.filter((i) => i.value !== item.value)
+          this.$emit('update:modelValue', [...this.selected])
+        }
       },
     },
   }
